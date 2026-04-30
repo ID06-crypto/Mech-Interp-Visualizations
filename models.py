@@ -28,10 +28,15 @@ def train(model, X, y, epochs=1000, lr=0.01):
         loss.backward()
         optimizer.step()
 
+        losses = []
+        accs = []
+
         if (epoch + 1) % 100 == 0:
             with torch.no_grad():
                 preds = model(X).argmax(dim=1)
                 acc = (preds == y).float().mean().item()
+                losses.append(loss.item())
+                accs.append(acc)
             print(f"Epoch {epoch + 1}/{epochs}  loss={loss.item():.4f}  acc={acc:.4f}")
 
-    return model
+    return model, losses, accs
